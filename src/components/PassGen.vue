@@ -4,10 +4,12 @@ import { data } from '/src/data/data'
 import useLength from '/src/hooks/passwordLength'
 import useCheckboxes from '/src/hooks/checkboxes'
 import useGeneratePasseord from '/src/hooks/generatePassword'
+import useCopyToClipboard from '/src/hooks/copyToClipboard'
 
 const { length, minLength, maxLength, checkLength } = useLength()
 const { checkboxes, disableCheckbox } = useCheckboxes()
 const { password, generatePassword } = useGeneratePasseord(toRaw(checkboxes.value), data, length)
+const { clipboardTooltipText, showTooltip, copyToClipboard } = useCopyToClipboard(password)
 
 </script>
 
@@ -66,7 +68,23 @@ const { password, generatePassword } = useGeneratePasseord(toRaw(checkboxes.valu
       <v-card
         class="pa-2 text-center"
       >
-        <h2>{{ password }}</h2>
+        <h2
+          @click="copyToClipboard">
+            {{ password }}
+            <v-icon
+              color="gray"
+              icon="mdi-content-copy"
+              size="x-small"
+              v-show="password"
+              class="ml-2"
+              @click="showTooltip = !showTooltip"
+            ></v-icon>
+            <v-tooltip
+              activator="parent"
+              location="top"
+              v-model="showTooltip"
+            >{{ clipboardTooltipText }}</v-tooltip>
+        </h2>
       </v-card>
 
 
